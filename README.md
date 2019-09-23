@@ -38,6 +38,8 @@ statement with a call to the function foundations.log_metric(). This function ta
 job successfully completes, logged metrics for each job will be visible from the Foundations GUI. Copy the following line 
 and replace the print statement with it:
 
+Line 43 in driver.py: 
+
 ```python
 foundations.log_metric('test mean squared error', float(mse))
 ```   
@@ -48,6 +50,8 @@ Currently, we create a matplotlib graph of validation mean squared error at the 
 With Atlas, we can save any artifact to the GUI with just one line. Add the following lines after "plt.savefig()" 
 to send the locally saved plot to the Atlas GUI. 
 
+Line 37 in driver.py: 
+
 ```python
 foundations.save_artifact('plots/validation_mse.png', "validation_mse")
 ```   
@@ -57,6 +61,8 @@ foundations.save_artifact('plots/validation_mse.png', "validation_mse")
 [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) is a super powerful data visualization tool that makes visualizing your training extremely easy. Foundations 
 Atlas has full TensorBoard integration. To access TensorBoard directly from the Atlas GUI, add the following line of code 
 to start of driver.py.  
+
+Line 7 in driver.py: 
 
 ```python
 foundations.set_tensorboard_logdir('train_logs')
@@ -156,7 +162,7 @@ The job execution code is still coming from driver.py. In order to get this to w
 made to driver.py. In the code block where the hyperparameters are defined (indicated by the comment 'define 
 hyperparameters'), we'll load the sampled hyperparameters instead of defining a fixed set of hyperparameters explictely.
 
-Replace that block with the following:
+Replace that block (line 18 - 28) with the following: 
 
 ```python
 # define hyperparameters
