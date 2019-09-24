@@ -4,27 +4,30 @@
 
 ## Introduction
 
-This tutorial demonstrates how to make use of the features of Foundations Atlas. Note that any machine learning
-job can be run in Atlas without modification. However, with minimal changes to the code we can take advantage of 
-Atlas features that will enable us to launch many jobs and organize our model experiments more systematically.
+This tutorial demonstrates how to make use of the features of Foundations Atlas. Note that **any machine learning
+job can be run in Atlas without modification.** However, with minimal changes to the code we can take advantage of
+Atlas features that will enable us to:
 
-This tutorial assumes that you have already installed Foundations Atlas. If you have not then you can download Foundations
+* launch many jobs efficiently
+* organize our model experiments results more systematically.
+
+This tutorial assumes that you have already installed Foundations Atlas. If you have not, then you can download Foundations
  Atlas community edition for free from [this link](https://www.atlas.dessa.com/).
 
 In this tutorial we make use of this data from a Kaggle competition (https://www.kaggle.com/c/bluebook-for-bulldozers).
-The competition is about predicting the sale price of a particular piece of heavy equipment at auction based on it's 
+The competition is about predicting the sale price of a particular piece of heavy equipment at auction based on it's
 usage, equipment type, and configuration.
 
 ## Enabling Atlas Features
 
 You are provided with the following python scripts:
-* driver.py: A driver script which downloads the dataset, prepares it for model training and evaluation, trains a  
+* **driver.py**: A driver script which downloads the dataset, prepares it for model training and evaluation, trains a  
 fully connected network with entity embeddings, then evaluates the model on the test set
-* model.py: Code to implement the neural network network
+* **model.py**: Code to implement the neural network
 
 Note that this code runs without any modification.
 
-To enable Atlas features, we only to need to make a few changes. Firstly add the 
+To enable Atlas features, we only to need to make a few changes. Firstly add the
 following line to the top of driver.py and model.py:
 
 ```python
@@ -34,11 +37,11 @@ import foundations
 ### Logging Metrics
 
 The last line of driver.py prints the test mean squared error. We'll replace this print
-statement with a call to the function foundations.log_metric(). This function takes two arguments, a key and a value. Once a 
-job successfully completes, logged metrics for each job will be visible from the Foundations GUI. Copy the following line 
-and replace the print statement with it:
+statement with a call to the function foundations.log_metric(). This function takes two arguments, a key and a value. Once a
+job successfully completes, **logged metrics for each job will be visible from the Foundations GUI.** Copy the following line
+and replace the print statement with it.
 
-Line 43 in driver.py: 
+Line 43 in driver.py:
 
 ```python
 foundations.log_metric('test mean squared error', float(mse))
@@ -47,10 +50,10 @@ foundations.log_metric('test mean squared error', float(mse))
 ### Saving Artifacts
 
 Currently, we create a matplotlib graph of validation mean squared error at the end of driver.py.  
-With Atlas, we can save any artifact to the GUI with just one line. Add the following lines after "plt.savefig()" 
-to send the locally saved plot to the Atlas GUI. 
+With Atlas, we can save any artifact to the GUI with just one line. Add the following lines after "plt.savefig()"
+to send the locally saved plot to the Atlas GUI.
 
-Line 37 in driver.py: 
+Line 37 in driver.py:
 
 ```python
 foundations.save_artifact('plots/validation_mse.png', "validation_mse")
@@ -58,22 +61,22 @@ foundations.save_artifact('plots/validation_mse.png', "validation_mse")
 
 ### TensorBoard Integration
 
-[TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) is a super powerful data visualization tool that makes visualizing your training extremely easy. Foundations 
-Atlas has full TensorBoard integration. To access TensorBoard directly from the Atlas GUI, add the following line of code 
+[TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) is a super powerful data visualization tool that makes visualizing your training extremely easy. Foundations
+Atlas has full TensorBoard integration. To access TensorBoard directly from the Atlas GUI, add the following line of code
 to start of driver.py.  
 
-Line 7 in driver.py: 
+Line 7 in driver.py:
 
 ```python
 foundations.set_tensorboard_logdir('train_logs')
 ```
 
-The function set_tensorboard_logdir() take one argument, the directory that your TensorBoard files will be saved to. TensorBoard files 
-are generated at each epoch through a callback, you can find the code in train() function model.py. 
+The function set_tensorboard_logdir() take one argument, the directory that your TensorBoard files will be saved to. TensorBoard files
+are generated at each epoch through a callback, you can find the code in train() function model.py.
 
 ### Configuration
 
-Lastly, create a file in the project directory named "job.config.yaml", and copy the text from below into the file. 
+Lastly, create a file in the project directory named "job.config.yaml", and copy the text from below into the file.
 
 ```yaml
 project_name: 'bulldozer-demo'
@@ -82,25 +85,25 @@ log_level: INFO
 
 ## Running a Job
 
-Activate the environment in which you have foundations installed, then from inside the project directory (cifar-demo)
+Activate the environment in which you have foundations installed, then from inside the project directory (bulldozer-demo)
 run the following command:
 
 ```shell script
 foundations submit scheduler . driver.py
 ```
 
-This will schedule a job to be run. Now open the Atlas GUI in your browser: http://localhost:5555/projects. Click into 
-the project 'bulldozer-demo', then click on the "Job Details" tab. Here, you'll see the running job. Once it completes, it will have a green status and you will 
+This will schedule a job to be run. Now open the Atlas GUI in your browser: http://localhost:5555/projects. Click into
+the project 'bulldozer-demo', then click on the "Job Details" tab. Here, you'll see the running job. Once it completes, it will have a green status and you will
 see your logged metrics.
 
-To view your saved artifacts, you can click on the expansion icon to the right of the running job, then click on the 
+To view your saved artifacts, you can click on the expansion icon to the right of the running job, then click on the
 "Artifacts" tab, and select the artifact you want to view from the menu below.
 
 To view your model training on TensorBoard, simply select the running job, and click the "Send to TensorBoard" button on the GUI.
 
 ## Running a Hyperparameter Search
 
-Atlas makes running and tracking the results of a hyperparameter easy. Create a new file called 
+Atlas makes running and tracking the results of a set of hyperparameters easy. Create a new file called
 'hyperparameter_search.py' and paste in the following code:
 
 ```python
@@ -157,19 +160,19 @@ for _ in range(num_jobs):
     foundations.submit(scheduler_config='scheduler', job_dir='.', command='driver.py', params=hyperparameters, stream_job_logs=True)
 ```
 
-This script samples hyperparameters uniformly from pre-defined ranges, then submits jobs using those hyperparameters. 
-The job execution code is still coming from driver.py. In order to get this to work, a small modification needs to be 
-made to driver.py. In the code block where the hyperparameters are defined (indicated by the comment 'define 
+This script samples hyperparameters uniformly from pre-defined ranges, then submits jobs using those hyperparameters.
+The job execution code is still coming from driver.py. In order to get this to work, a small modification needs to be
+made to driver.py. In the code block where the hyperparameters are defined (indicated by the comment 'define
 hyperparameters'), we'll load the sampled hyperparameters instead of defining a fixed set of hyperparameters explictely.
 
-Replace that block (line 18 - 28) with the following: 
+Replace that block (line 18 - 28) with the following:
 
 ```python
 # define hyperparameters
 hyperparameters = foundations.load_parameters()
 ```
 
-Now, to run the hyperparameter search, from the project directory (bulldozer-demo) simply run 
+Now, to run the hyperparameter search, from the project directory (bulldozer-demo) simply run
 
 ```shell script
 python hyperparameter_search.py
@@ -177,14 +180,8 @@ python hyperparameter_search.py
 
 ## Congrats!
 
-That's it! You've completed the Foundations Atlas Tutorial. Now, you should be able to go to the GUI and see your 
-running and completed jobs, compare model hyperparemeters and performance, as well as view artifacts and training 
-visualizations on TensorBoard. 
+That's it! You've completed the Foundations Atlas Tutorial. Now, you should be able to go to the GUI and see your
+running and completed jobs, compare model hyperparameters and performance, as well as view artifacts and training
+visualizations on TensorBoard.
 
 Do you have any thoughts or feedback for Foundations Atlas? Join the [Dessa Slack community](https://dessa-community.slack.com/join/shared_invite/enQtNzY5MTA3OTMxNTkwLWUyZDYzM2JmMDk0N2NjNjVhZDU5NTc1ODEzNzJjMzRlMDcyYmY3ODI1ZWMxYTQ3MzdmNjcyOTVhMzg2MjkwYmY)!
-
-
-
-
-
-
