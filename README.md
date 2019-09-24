@@ -8,7 +8,7 @@ This tutorial demonstrates how to make use of the features of Foundations Atlas.
 job can be run in Atlas without modification.** However, with minimal changes to the code we can take advantage of
 Atlas features that will enable us to:
 
-* when a training job completes, view artifacts such as plots and tensorboard logs, alongside model performance metrics  
+* view artifacts such as plots and tensorboard logs, alongside model performance metrics  
 * launch many training jobs at once
 * organize model experiments more systematically
 
