@@ -120,7 +120,6 @@ import os
 os.environ['FOUNDATIONS_COMMAND_LINE'] = 'True'
 import foundations
 import numpy as np
-import copy
 
 def generate_params():
   hyperparameter_ranges = {'n_epochs': int(np.random.choice([2,4])),
