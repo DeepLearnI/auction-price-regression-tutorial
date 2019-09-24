@@ -18,6 +18,11 @@ In this tutorial we make use of this data from a Kaggle competition (https://www
 The competition is about predicting the sale price of a particular piece of heavy equipment at auction based on it's
 usage, equipment type, and configuration.
 
+## Before You Start
+
+Make sure you're in the same environment that you've downloaded Foundations Atlas to.
+Once you're in the environment, run ```atlas-server start``` in a separate terminal.
+Validate the GUI starting up by going to the GUI at https://localhost:5555
 ## Enabling Atlas Features
 
 You are provided with the following python scripts:
@@ -34,18 +39,20 @@ following line to the top of driver.py and model.py:
 import foundations
 ```
 
-### Logging Metrics
+### Logging Metrics and Parameters
 
 The last line of driver.py prints the test mean squared error. We'll replace this print
-statement with a call to the function foundations.log_metric(). This function takes two arguments, a key and a value. Once a
+statement with a call to the function foundations.log_metric().This function takes two arguments, a key and a value. Once a
 job successfully completes, **logged metrics for each job will be visible from the Foundations GUI.** Copy the following line
 and replace the print statement with it.
 
-Line 43 in driver.py:
+Line 46 in driver.py:
 
 ```python
 foundations.log_metric('test mean squared error', float(mse))
 ```   
+
+
 
 ### Saving Artifacts
 
@@ -53,7 +60,7 @@ Currently, we create a matplotlib graph of validation mean squared error at the 
 With Atlas, we can save any artifact to the GUI with just one line. Add the following lines after "plt.savefig()"
 to send the locally saved plot to the Atlas GUI.
 
-Line 37 in driver.py:
+Line 38 in driver.py:
 
 ```python
 foundations.save_artifact('plots/validation_mse.png', "validation_mse")
@@ -65,7 +72,7 @@ foundations.save_artifact('plots/validation_mse.png', "validation_mse")
 Atlas has full TensorBoard integration. To access TensorBoard directly from the Atlas GUI, add the following line of code
 to start of driver.py.  
 
-Line 7 in driver.py:
+Line 8 in driver.py:
 
 ```python
 foundations.set_tensorboard_logdir('train_logs')
@@ -113,56 +120,36 @@ import foundations
 import numpy as np
 import copy
 
-
-class SearchSpace:
-
-    def __init__(self, min, max, type):
-        self.min = min
-        self.max = max
-        self.type = type
-
-    def sample(self):
-        if self.type == int:
-            return np.random.randint(self.min, self.max)
-        elif self.type == float:
-            return round(np.random.uniform(self.min, self.max), 2)
+def generate_params():
+  hyperparameter_ranges = {'n_epochs': int(np.random.choice([2,4])),
+                     'batch_size': int(np.random.choice([64,128])),
+                     'validation_percentage': 0.1,
+                     'dense_blocks': [{'size': int(np.random.choice([64,128,512])), 'dropout_rate': np.random.uniform(0,0.5)}],
+                     'embedding_factor': np.random.uniform(0.2,0.6),
+                     'learning_rate':np.random.choice([0.0001,0.001,0.0005]),
+                     'lr_plateau_factor':0.1,
+                     'lr_plateau_patience':3,
+                     'early_stopping_min_delta':np.random.choice([0.0001,0.001]),
+                     'early_stopping_patience':5}
 
 
-def sample_hyperparameters(hyperparameter_ranges):
-    hyperparameters = copy.deepcopy(hyperparameter_ranges)
-    for hparam in hyperparameter_ranges:
-        if isinstance(hyperparameter_ranges[hparam], SearchSpace):
-            search_space = hyperparameter_ranges[hparam]
-            hyperparameters[hparam] = search_space.sample()
-        elif isinstance(hyperparameter_ranges[hparam], list):
-            for i, block in enumerate(hyperparameter_ranges[hparam]):
-                for block_hparam in block:
-                    if isinstance(block[block_hparam], SearchSpace):
-                        search_space = block[block_hparam]
-                        hyperparameters[hparam][i][block_hparam] = search_space.sample()
-    return hyperparameters
+  return hyperparameter_ranges
 
-
-hyperparameter_ranges = {'n_epochs': 2,
-                   'batch_size': 128,
-                   'validation_percentage': 0.1,
-                   'dense_blocks': [{'size': SearchSpace(64,512,int), 'dropout_rate': SearchSpace(0,0.5,float)}],
-                   'embedding_factor': SearchSpace(0.2,0.6,float),
-                   'learning_rate':0.0001,
-                   'lr_plateau_factor':0.1,
-                   'lr_plateau_patience':3,
-                   'early_stopping_min_delta':0.001,
-                   'early_stopping_patience':5}
+# A loop that calls the submit method from the Foundations SDK which takes the hyperparameters and the entrypoint script for our code (driver.py)
 
 num_jobs = 5
 for _ in range(num_jobs):
-    hyperparameters = sample_hyperparameters(hyperparameter_ranges)
-    foundations.submit(scheduler_config='scheduler', job_dir='.', command='driver.py', params=hyperparameters, stream_job_logs=True)
+  hyperparameters = generate_params()
+  foundations.submit(scheduler_config='scheduler', job_dir='.', command='driver.py', params=hyperparameters, stream_job_logs=True)  
+
 ```
 
-This script samples hyperparameters uniformly from pre-defined ranges, then submits jobs using those hyperparameters.
-The job execution code is still coming from driver.py. In order to get this to work, a small modification needs to be
-made to driver.py. In the code block where the hyperparameters are defined (indicated by the comment 'define
+
+
+This script samples hyperparameters uniformly from pre-defined ranges, then submits jobs using those hyperparameters. For a script that exerts more control over the hyperparameter sampling, check the end of the tutorial.
+The job execution code is still coming from driver.py; i.e. each experiment is submitted to and ran with the driver.
+
+In order to get this to work, a small modification needs to be made to driver.py. In the code block where the hyperparameters are defined (indicated by the comment 'define
 hyperparameters'), we'll load the sampled hyperparameters instead of defining a fixed set of hyperparameters explictely.
 
 Replace that block (line 18 - 28) with the following:
