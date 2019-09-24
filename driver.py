@@ -1,7 +1,6 @@
 from model import FullyConnectedNetwork
 from utils import download_data
 import matplotlib.pyplot as plt
-from tensorflow.keras.callbacks import History
 
 # add foundations.set_tensorboard_logdir() code here
 

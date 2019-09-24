@@ -8,15 +8,16 @@ This tutorial demonstrates how to make use of the features of Foundations Atlas.
 job can be run in Atlas without modification.** However, with minimal changes to the code we can take advantage of
 Atlas features that will enable us to:
 
+* when a training job completes, view artifacts such as plots and tensorboard logs, alongside model performance metrics  
 * launch many jobs efficiently
-* organize our model experiments results more systematically.
+* organize our model experiments more systematically
 
 This tutorial assumes that you have already installed Foundations Atlas. If you have not, then you can download Foundations
  Atlas community edition for free from [this link](https://www.atlas.dessa.com/).
 
 In this tutorial we make use of this data from a Kaggle competition (https://www.kaggle.com/c/bluebook-for-bulldozers).
 The competition is about predicting the sale price of a particular piece of heavy equipment at auction based on it's
-usage, equipment type, and configuration.
+usage, equipment type, and configuration. Note that the target (the sale price) has been mapped to a log scale.
 
 ## Before You Start
 
@@ -122,7 +123,7 @@ import foundations
 import numpy as np
 
 def generate_params():
-  hyperparameter_ranges = {'n_epochs': int(np.random.choice([2,4])),
+  hyperparameters = {'n_epochs': int(np.random.choice([2,4])),
                      'batch_size': int(np.random.choice([64,128])),
                      'validation_percentage': 0.1,
                      'dense_blocks': [{'size': int(np.random.choice([64,128,512])), 'dropout_rate': np.random.uniform(0,0.5)}],
@@ -134,7 +135,7 @@ def generate_params():
                      'early_stopping_patience':5}
 
 
-  return hyperparameter_ranges
+  return hyperparameters
 
 # A loop that calls the submit method from the Foundations SDK which takes the hyperparameters and the entrypoint script for our code (driver.py)
 
