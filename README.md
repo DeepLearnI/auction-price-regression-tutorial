@@ -22,7 +22,7 @@ usage, equipment type, and configuration.
 
 Make sure you're in the same environment that you've downloaded Foundations Atlas to.
 Once you're in the environment, run ```atlas-server start``` in a separate terminal.
-Validate the GUI starting up by going to the GUI at https://localhost:5555
+Validate the GUI starting up by going to the GUI at http://localhost:5555/projects
 ## Enabling Atlas Features
 
 You are provided with the following python scripts:
@@ -103,6 +103,8 @@ This will schedule a job to be run. Now open the Atlas GUI in your browser: http
 the project 'bulldozer-demo', then click on the "Job Details" tab. Here, you'll see the running job. Once it completes, it will have a green status and you will
 see your logged metrics.
 
+<img src="images/gui.png" >
+
 To view your saved artifacts, you can click on the expansion icon to the right of the running job, then click on the
 "Artifacts" tab, and select the artifact you want to view from the menu below.
 
@@ -152,7 +154,7 @@ The job execution code is still coming from driver.py; i.e. each experiment is s
 In order to get this to work, a small modification needs to be made to driver.py. In the code block where the hyperparameters are defined (indicated by the comment 'define
 hyperparameters'), we'll load the sampled hyperparameters instead of defining a fixed set of hyperparameters explictely.
 
-Replace that block (line 18 - 28) with the following:
+Replace that block (line 19 - 28) with the following:
 
 ```python
 # define hyperparameters
