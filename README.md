@@ -9,8 +9,8 @@ job can be run in Atlas without modification.** However, with minimal changes to
 Atlas features that will enable us to:
 
 * when a training job completes, view artifacts such as plots and tensorboard logs, alongside model performance metrics  
-* launch many jobs efficiently
-* organize our model experiments more systematically
+* launch many training jobs at once
+* organize model experiments more systematically
 
 This tutorial assumes that you have already installed Foundations Atlas. If you have not, then you can download Foundations
  Atlas community edition for free from [this link](https://www.atlas.dessa.com/).
@@ -52,8 +52,6 @@ Line 46 in driver.py:
 ```python
 foundations.log_metric('test mean squared error', float(mse))
 ```   
-
-
 
 ### Saving Artifacts
 
