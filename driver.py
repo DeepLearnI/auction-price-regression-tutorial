@@ -14,7 +14,7 @@ categorical_sizes = {col: train_df[col].nunique() for col in train_df.columns if
 
 # define hyperparameters
 # replace following with foundations.load_parameters()
-hyperparameters = {'n_epochs': 2,
+hyperparameters = {'n_epochs': 5,
                    'batch_size': 128,
                    'validation_percentage': 0.1,
                    'dense_blocks': [{'size': 256, 'dropout_rate': 0}],
