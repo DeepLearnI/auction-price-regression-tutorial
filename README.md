@@ -26,11 +26,15 @@ type, and configuration. In this tutorial we'll train regression models to predi
 
 ## Before You Start
 
-Make sure you're in the same environment that you've downloaded Foundations Atlas to. Once you're in the environment, 
-run ```atlas-server start``` in a separate terminal. Validate the GUI starting up by going to the GUI at 
-http://localhost:5555/projects
+### Start Atlas
 
-Also clone the repository and cd into it by running:
+Activate the conda environment in which Foundations Atlas is installed. Then run ```atlas-server start```. Validate that
+ the GUI has been started by accessing it at http://localhost:5555/projects
+
+### Clone the Tutorial
+
+Clone this repository and make it your current directory by running:
+
 ```shell script
 git clone https://github.com/DeepLearnI/auction-price-regression-tutorial auction_price_regression_tutorial
 cd auction_price_regression_tutorial
