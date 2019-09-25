@@ -33,7 +33,7 @@ Activate the conda environment in which Foundations Atlas is installed. Then run
 
 Clone this repository and make it your current directory by running:
 
-```shell script
+```
 git clone https://github.com/DeepLearnI/auction-price-regression-tutorial auction_price_regression_tutorial
 cd auction_price_regression_tutorial
 ```
@@ -50,7 +50,7 @@ Note that this code runs without any modification.
 To enable Atlas features, we only to need to make a few changes. Firstly add the
 following line to the top of driver.py and model.py:
 
-```python
+```
 import foundations
 ```
 
@@ -63,7 +63,7 @@ and replace the print statement with it.
 
 Line 46 in driver.py:
 
-```python
+```
 foundations.log_metric('test mean squared error', float(mse))
 ```   
 
@@ -75,7 +75,7 @@ to send the locally saved plot to the Atlas GUI.
 
 Line 38 in driver.py:
 
-```python
+```
 foundations.save_artifact('plots/validation_mse.png', "validation_mse")
 ```   
 
@@ -87,7 +87,7 @@ to start of driver.py.
 
 Line 8 in driver.py:
 
-```python
+```
 foundations.set_tensorboard_logdir('train_logs')
 ```
 
@@ -98,7 +98,7 @@ are generated at each epoch through a callback, you can find the code in train()
 
 Lastly, create a file in the project directory named "job.config.yaml", and copy the text from below into the file.
 
-```yaml
+```
 project_name: 'bulldozer-demo'
 log_level: INFO
 ```
@@ -108,7 +108,7 @@ log_level: INFO
 Activate the environment in which you have foundations installed, then from inside the project directory (bulldozer-demo)
 run the following command:
 
-```shell script
+```
 foundations submit scheduler . driver.py
 ```
 
@@ -128,7 +128,7 @@ To view your model training on TensorBoard, simply select the running job, and c
 Atlas makes running and tracking the results of a set of hyperparameters easy. Create a new file called
 'hyperparameter_search.py' and paste in the following code:
 
-```python
+```
 import os
 os.environ['FOUNDATIONS_COMMAND_LINE'] = 'True'
 import foundations
@@ -165,14 +165,14 @@ hyperparameters'), we'll load the sampled hyperparameters instead of defining a 
 
 Replace that block (line 19 - 28) with the following:
 
-```python
+```
 # define hyperparameters
 hyperparameters = foundations.load_parameters()
 ```
 
 Now, to run the hyperparameter search, from the project directory (bulldozer-demo) simply run
 
-```shell script
+```
 python hyperparameter_search.py
 ```
 
