@@ -1,3 +1,4 @@
+
 #  Foundations Atlas Tutorial
 
 *Estimated time: 30 minutes*
@@ -15,15 +16,20 @@ Atlas features that will enable us to:
 This tutorial assumes that you have already installed Foundations Atlas. If you have not, then you can download Foundations
  Atlas community edition for free from [this link](https://www.atlas.dessa.com/).
 
+## The Data
+
 In this tutorial we make use of this data from a Kaggle competition (https://www.kaggle.com/c/bluebook-for-bulldozers).
-The competition is about predicting the sale price of a particular piece of heavy equipment at auction based on it's
-usage, equipment type, and configuration. Note that the target (the sale price) has been mapped to a log scale.
+However don't worry about manually downloading the data as it will be downloaded automatically by running the provided
+scripts. This dataset contains the sale price of heavy machinery (such as bulldozers) as well as it's usage, equipment 
+type, and configuration. In this tutorial we'll train regression models to predict the sale price. Note that the target 
+(the sale price) has been mapped to a log scale.
 
 ## Before You Start
 
-Make sure you're in the same environment that you've downloaded Foundations Atlas to.
-Once you're in the environment, run ```atlas-server start``` in a separate terminal.
-Validate the GUI starting up by going to the GUI at http://localhost:5555/projects
+Make sure you're in the same environment that you've downloaded Foundations Atlas to. Once you're in the environment, 
+run ```atlas-server start``` in a separate terminal. Validate the GUI starting up by going to the GUI at 
+http://localhost:5555/projects
+
 ## Enabling Atlas Features
 
 You are provided with the following python scripts:
@@ -140,11 +146,8 @@ def generate_params():
 num_jobs = 5
 for _ in range(num_jobs):
   hyperparameters = generate_params()
-  foundations.submit(scheduler_config='scheduler', job_dir='.', command='driver.py', params=hyperparameters, stream_job_logs=True)  
-
+  foundations.submit(scheduler_config='scheduler', job_dir='.', command='driver.py', params=hyperparameters, stream_job_logs=True)
 ```
-
-
 
 This script samples hyperparameters uniformly from pre-defined ranges, then submits jobs using those hyperparameters. For a script that exerts more control over the hyperparameter sampling, check the end of the tutorial.
 The job execution code is still coming from driver.py; i.e. each experiment is submitted to and ran with the driver.
