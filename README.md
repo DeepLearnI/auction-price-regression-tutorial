@@ -18,20 +18,18 @@ This tutorial assumes that you have already installed Foundations Atlas. If you 
 
 ## The Data
 
-In this tutorial we make use of this data from a Kaggle competition (https://www.kaggle.com/c/bluebook-for-bulldozers).
+In this tutorial we make use of this data from a [Kaggle competition](https://www.kaggle.com/c/bluebook-for-bulldozers).
 However don't worry about manually downloading the data as it will be downloaded automatically by running the provided
 scripts. This dataset contains the sale price of heavy machinery (such as bulldozers) as well as it's usage, equipment 
-type, and configuration. In this tutorial we'll train regression models to predict the sale price. Note that the target 
-(the sale price) has been mapped to a log scale.
+type, and configuration. In this tutorial we'll train regression models to predict the sale price from the other
+provided information. Note that the target (the sale price) has been mapped to a log scale.
 
-## Before You Start
-
-### Start Atlas
+## Start Atlas
 
 Activate the conda environment in which Foundations Atlas is installed. Then run ```atlas-server start```. Validate that
  the GUI has been started by accessing it at http://localhost:5555/projects
 
-### Clone the Tutorial
+## Clone the Tutorial
 
 Clone this repository and make it your current directory by running:
 
