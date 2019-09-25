@@ -30,6 +30,12 @@ Make sure you're in the same environment that you've downloaded Foundations Atla
 run ```atlas-server start``` in a separate terminal. Validate the GUI starting up by going to the GUI at 
 http://localhost:5555/projects
 
+Also clone the repository and cd into it by running:
+```shell script
+git clone https://github.com/DeepLearnI/auction-price-regression-tutorial auction_price_regression_tutorial
+cd auction_price_regression_tutorial
+```
+
 ## Enabling Atlas Features
 
 You are provided with the following python scripts:
